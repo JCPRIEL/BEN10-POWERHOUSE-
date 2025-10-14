@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>BEN10 POWERHOUSE — Tools Shop</title>
+  <style>
+    :root{
+      --neon:#00ff6a; /* neon green */
+      --bg:#000000;
+      --card:#0b0b0b;
+      --muted:#9b9b9b;
+      --accent:var(--neon);
+    }
+    html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:
+      radial-gradient(circle at 10% 10%, rgba(0,255,106,0.04) 0%, transparent 10%),
+      radial-gradient(circle at 90% 90%, rgba(0,255,106,0.03) 0%, transparent 12%),
+      linear-gradient(180deg, #000000 0%, #030303 100%);
+      color:#fff}/* neon grid background */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;opacity:0.06;
+  background-image:linear-gradient(0deg, rgba(0,255,106,.07) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(0,255,106,.07) 1px, transparent 1px);
+  background-size:60px 60px, 60px 60px;mix-blend-mode:screen;
+}
+
+header{display:flex;align-items:center;gap:18px;padding:28px 40px;border-bottom:1px solid rgba(0,255,106,0.08);}
+.brand{display:flex;align-items:center;gap:12px}
+.brand h1{font-size:34px;margin:0;letter-spacing:2px;display:flex;align-items:center;gap:8px}
+.ben-text{color:#fff;font-weight:800;display:flex;align-items:center;}
+.ben-zero{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:transparent;box-shadow:0 0 18px rgba(0,255,106,0.35);}
+.omnitrix-image{width:44px;height:44px;border-radius:50%;object-fit:cover;box-shadow:0 0 15px rgba(0,255,106,0.5);}
+.powerhouse{color:var(--neon);font-weight:800;font-size:30px}
+
+nav{margin-left:auto}
+.cart-btn{background:transparent;border:1px solid rgba(0,255,106,0.16);padding:8px 14px;border-radius:10px;color:var(--neon);cursor:pointer;transition:all 0.3s ease;}
+.cart-btn:hover{background:rgba(0,255,106,0.1);box-shadow:0 0 12px rgba(0,255,106,0.2);}
+
+main{padding:28px 40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:14px;border:1px solid rgba(0,255,106,0.06);box-shadow:0 6px 30px rgba(0,0,0,0.6);transition:all 0.3s ease;}
+.card:hover{transform:translateY(-5px);border-color:rgba(0,255,106,0.2);box-shadow:0 10px 30px rgba(0,0,0,0.8);}
+.card img{width:100%;height:160px;object-fit:cover;border-radius:10px}
+.card h3{margin:10px 0 6px 0}
+.price{font-weight:800;color:var(--neon);font-size:18px}
+.actions{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.btn{background:transparent;border:1px solid rgba(255,255,255,0.08);padding:8px 12px;border-radius:8px;color:#fff;cursor:pointer;transition:all 0.3s ease;}
+.btn:hover{background:rgba(255,255,255,0.05);}
+.btn.primary{background:var(--neon);color:#05120a;border:none}
+.btn.primary:hover{background:#00e65d;box-shadow:0 0 12px rgba(0,255,106,0.4);}
+
+/* Welcome Section with Background */
+.welcome-section {
+  padding: 60px 0;
+  text-align: center;
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url('https://i.postimg.cc/fW5NB5qM/file-00000000503061f680c13058ec80eeae.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: 14px;
+  margin-bottom: 40px;
+  border: 1px solid rgba(0,255,106,0.1);
+  box-shadow: 0 0 30px rgba(0,255,106,0.1);
+}
+
+.welcome-section h2 {
+  color: var(--neon);
+  font-size: 36px;
+  margin-bottom: 16px;
+  text-shadow: 0 0 10px rgba(0,255,106,0.5);
+}
+
+.welcome-section p {
+  max-width: 600px;
+  margin: 0 auto;
+  color: #fff;
+  font-size: 18px;
+}
+
+/* cart panel */
+.cart-panel{position:fixed;right:20px;bottom:20px;background:linear-gradient(180deg,#07110a,#07110a);border:1px solid rgba(0,255,106,0.09);padding:14px;border-radius:12px;min-width:260px;box-shadow:0 8px 40px rgba(0,0,0,0.7);z-index:1000;}
+.cart-panel h4{margin:0 0 8px 0}
+.cart-items{max-height:220px;overflow:auto;margin-bottom:10px}
+.cart-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed rgba(255,255,255,0.03)}
+.total{display:flex;justify-content:space-between;font-weight:900;margin-top:8px}
+
+/* Checkout Modal */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:2000;justify-content:center;align-items:center;}
+.modal-content{background:linear-gradient(180deg,#0b0b0b,#0a0a0a);border:1px solid rgba(0,255,106,0.15);border-radius:14px;width:90%;max-width:500px;max-height:90vh;overflow:auto;padding:24px;box-shadow:0 0 40px rgba(0,255,106,0.1);}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;border-bottom:1px solid rgba(0,255,106,0.1);padding-bottom:10px;}
+.modal-header h2{color:var(--neon);margin:0;}
+.close-btn{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;transition:color 0.3s;}
+.close-btn:hover{color:var(--neon);}
+
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;margin-bottom:6px;color:#ddd;}
+.form-group input, .form-group textarea, .form-group select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:#fff;box-sizing:border-box;}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus{outline:none;border-color:var(--neon);box-shadow:0 0 8px rgba(0,255,106,0.2);}
+
+.checkout-summary{margin:20px 0;padding:16px;border-radius:10px;background:rgba(0,255,106,0.05);border:1px solid rgba(0,255,106,0.1);}
+.checkout-summary h3{margin-top:0;color:var(--neon);}
+.summary-row{display:flex;justify-content:space-between;margin-bottom:8px;}
+.summary-row.total{font-weight:bold;border-top:1px dashed rgba(255,255,255,0.1);padding-top:8px;margin-top:12px;}
+
+footer{padding:18px 40px;color:var(--muted);font-size:13px;border-top:1px solid rgba(0,255,106,0.03)}
+
+/* Notification */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--card);
+  border: 1px solid rgba(0,255,106,0.3);
+  padding: 12px 18px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  color: var(--neon);
+  z-index: 1001;
+  transform: translateX(150%);
+  transition: transform 0.3s ease;
+}
+.notification.show {
+  transform: translateX(0);
+}
+
+@media (max-width:600px){
+  header{padding:18px}
+  main{padding:18px}
+  .brand h1{font-size:22px;}
+  .welcome-section {padding: 40px 20px;}
+  .welcome-section h2 {font-size: 28px;}
+  .welcome-section p {font-size: 16px;}
+  .omnitrix-image {width: 30px; height: 30px;}
+}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>
+        <span class="ben-text">BEN1<span class="ben-zero"><img src="https://i.postimg.cc/gjw54yBX/10569-omnitrix.gif" alt="Omnitrix" class="omnitrix-image"></span></span> 
+        <span class="powerhouse">POWERHOUSE</span>
+      </h1>
+    </div>
+    <nav>
+      <a href="#home" style="margin-right:15px;color:#fff;text-decoration:none;">Home</a>
+      <a href="#about" style="margin-right:15px;color:#fff;text-decoration:none;">About</a>
+      <a href="#contact" style="margin-right:15px;color:#fff;text-decoration:none;">Contact Us</a>
+      <button class="cart-btn" id="open-cart">Cart (<span id="cart-count">0</span>)</button>
+    </nav>
+  </header>
+  
+  <main id="home">
+    <section class="welcome-section">
+      <h2>Welcome to BEN10 POWERHOUSE</h2>
+      <p>Your one-stop shop for high-quality tools with a powerful Ben10-inspired neon theme.</p>
+    </section>
+    <section class="grid" id="products">
+      <!-- Product cards injected by JS -->
+    </section>
+  </main>
+  
+  <section id="about" style="padding:40px;text-align:center;">
+    <h2 style="color:var(--neon);font-size:24px;">About Us</h2>
+    <p style="max-width:600px;margin:10px auto;color:#ddd;">At BEN10 POWERHOUSE, we provide premium tools to builders, creators, and DIY enthusiasts. Our mission is to empower you with the best equipment at affordable prices.</p>
+  </section>
+  
+  <section id="contact" style="padding:40px;text-align:center;">
+    <h2 style="color:var(--neon);font-size:24px;">Contact Us</h2>
+    <p style="color:#ddd;">Email: support@ben10powerhouse.com<br>Phone: 123-456-7890</p>
+  </section>
+  
+  <div class="cart-panel" id="cart" style="display:none">
+    <h4>Shopping Cart</h4>
+    <div class="cart-items" id="cart-items"></div>
+    <div class="total"><span>Total:</span><span id="cart-total">₱0.00</span></div>
+    <div style="margin-top:10px;display:flex;gap:8px">
+      <button class="btn" id="clear-cart">Clear</button>
+      <button class="btn primary" id="checkout">Checkout</button>
+    </div>
+  </div>
+  
+  <!-- Checkout Modal -->
+  <div class="modal" id="checkout-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Complete Your Order</h2>
+        <button class="close-btn" id="close-modal">&times;</button>
+      </div>
+      
+      <form id="checkout-form">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="address">Shipping Address</label>
+          <textarea id="address" rows="3" required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="city">City</label>
+          <input type="text" id="city" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="payment">Payment Method</label>
+          <select id="payment" required>
+            <option value="">Select Payment Method</option>
+            <option value="credit">Credit Card</option>
+            <option value="debit">Debit Card</option>
+            <option value="gcash">GCash</option>
+            <option value="paymaya">PayMaya</option>
+            <option value="cod">Cash on Delivery</option>
+          </select>
+        </div>
+        
+        <div class="checkout-summary">
+          <h3>Order Summary</h3>
+          <div id="checkout-items"></div>
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <span id="checkout-subtotal">₱0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping:</span>
+            <span id="checkout-shipping">₱0.00</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total:</span>
+            <span id="checkout-total">₱0.00</span>
+          </div>
+        </div>
+        
+        <div style="margin-top:20px;display:flex;gap:10px;">
+          <button type="button" class="btn" id="cancel-checkout">Cancel</button>
+          <button type="submit" class="btn primary" style="flex:1;">Place Order</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <div class="notification" id="notification">Item added to cart!</div>
+  
+  <footer>© <span id="year"></span> BEN10 POWERHOUSE — Tools for builders & makers.</footer>
+  
+  <script>
+    const products = [
+      {id:1,name:'Wheelbarrow',price:1499,image:'https://i.postimg.cc/tCJXjX3B/file-000000008ccc61f8b82a501b46f80240.png'},
+      {id:2,name:'Chainsaw',price:5999,image:'https://i.postimg.cc/pLG5v21J/file-000000002f18620db475a1cb944dd2fc.png'},
+      {id:3,name:'Jackhammer',price:17599,image:'https://i.postimg.cc/ht9VqWqg/a77612d6-b6ad-4d7c-8a7a-eef7ac7e23ba.png'},
+      {id:4,name:'Toolbox',price:999,image:'https://i.postimg.cc/WbV5FnbL/file-000000002b9461f792d4b4220672aedb.png'},
+      {id:5,name:'Welding Machine',price:7999,image:'https://i.postimg.cc/pXPZCJhL/df540086-b705-4831-87a1-5d9d0d980431.png'},
+      {id:6,name:'Jigsaw',price:6999,image:'https://i.postimg.cc/j5GkFYbJ/file-00000000c9e461fab43d01cf8b7d8be2.png'},
+      {id:7,name:'Cordless Impact Drill',price:1299,image:'https://i.postimg.cc/HkxFZgcB/b44fe709-c31c-45c2-ae25-32621179fb5a.png'},
+      {id:8,name:'Electric Drill',price:3999,image:'https://i.postimg.cc/bNL9GfBw/file-000000006d9061fa8951b9e4b9e34f58.png'},
+      {id:9,name:'Circular Saw',price:2999,image:'https://i.postimg.cc/BQNB8fVg/file-00000000c9e461fa9319925756fbe8dd.png'},
+      {id:10,name:'Shovel',price:499,image:'https://i.postimg.cc/4xrxfmZD/76d0d4a3-2ff7-4841-ad0a-8d57624ac3cb.png'}
+    ];
+
+    function formatPHP(n){return '₱'+n.toLocaleString('en-PH',{minimumFractionDigits:0});}
+
+    const productsEl = document.getElementById('products');
+    products.forEach(p=>{
+      const card = document.createElement('article');card.className='card';
+      card.innerHTML = `
+        <img src="${p.image}" alt="${p.name}">
+        <h3>${p.name}</h3>
+        <div class="price">${formatPHP(p.price)}</div>
+        <div class="actions">
+          <button class="btn" onclick="viewDetails(${p.id})">Details</button>
+          <button class="btn primary" onclick="addToCart(${p.id})">Add to Cart</button>
+        </div>
+      `;
+      productsEl.appendChild(card);
+    });
+
+    // Simple cart (in-memory)
+    let cart = [];
+
+    function showNotification(message) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.classList.add('show');
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 2000);
+    }
+
+    function addToCart(id){
+      const prod = products.find(x=>x.id===id);
+      const existing = cart.find(x=>x.id===id);
+      if(existing) existing.qty++;
+      else cart.push({id:prod.id,name:prod.name,price:prod.price,qty:1});
+      updateCartUI();
+      showNotification(`${prod.name} added to cart!`);
+    }
+
+    function updateCartUI(){
+      const cartItems = document.getElementById('cart-items');
+      cartItems.innerHTML='';
+      let total = 0;let count=0;
+      cart.forEach(item=>{
+        total += item.price * item.qty; count += item.qty;
+        const row = document.createElement('div');row.className='cart-row';
+        row.innerHTML = `<div style="flex:1">${item.name} <small style='color:var(--muted)'>x${item.qty}</small></div><div>${formatPHP(item.price*item.qty)}</div>`;
+        cartItems.appendChild(row);
+      });
+      document.getElementById('cart-total').textContent = formatPHP(total);
+      document.getElementById('cart-count').textContent = count;
+      if(cart.length===0){cartItems.innerHTML='<div style="color:var(--muted)">Cart is empty</div>'}
+    }
+
+    function openCheckoutModal() {
+      if(cart.length === 0) {
+        showNotification('Your cart is empty. Add some tools!');
+        return;
+      }
+      
+      // Calculate shipping (10% of subtotal, minimum ₱100)
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const shipping = Math.max(100, Math.round(subtotal * 0.1));
+      const total = subtotal + shipping;
+      
+      // Update checkout summary
+      document.getElementById('checkout-subtotal').textContent = formatPHP(subtotal);
+      document.getElementById('checkout-shipping').textContent = formatPHP(shipping);
+      document.getElementById('checkout-total').textContent = formatPHP(total);
+      
+      // Update checkout items
+      const checkoutItems = document.getElementById('checkout-items');
+      checkoutItems.innerHTML = '';
+      cart.forEach(item => {
+        const itemRow = document.createElement('div');
+        itemRow.className = 'summary-row';
+        itemRow.innerHTML = `
+          <span>${item.name} x${item.qty}</span>
+          <span>${formatPHP(item.price * item.qty)}</span>
+        `;
+        checkoutItems.appendChild(itemRow);
+      });
+      
+      // Show modal
+      document.getElementById('checkout-modal').style.display = 'flex';
+    }
+
+    document.getElementById('open-cart').addEventListener('click',()=>{
+      const panel = document.getElementById('cart');
+      panel.style.display = panel.style.display==='none'?'block':'none';
+      updateCartUI();
+    });
+
+    document.getElementById('clear-cart').addEventListener('click',()=>{
+      cart=[];
+      updateCartUI();
+      showNotification('Cart cleared!');
+    });
+
+    document.getElementById('checkout').addEventListener('click', openCheckoutModal);
+
+    document.getElementById('close-modal').addEventListener('click', () => {
+      document.getElementById('checkout-modal').style.display = 'none';
+    });
+
+    document.getElementById('cancel-checkout').addEventListener('click', () => {
+      document.getElementById('checkout-modal').style.display = 'none';
+    });
+
+    document.getElementById('checkout-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // In a real application, you would send this data to a server
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const shipping = Math.max(100, Math.round(subtotal * 0.1));
+      const total = subtotal + shipping;
+      
+      let orderSummary = 'ORDER CONFIRMED!\n\n';
+      orderSummary += `Thank you, ${name}!\n\n`;
+      orderSummary += 'Your order:\n';
+      cart.forEach(item => {
+        orderSummary += `- ${item.qty}x ${item.name}: ${formatPHP(item.price * item.qty)}\n`;
+      });
+      orderSummary += `\nSubtotal: ${formatPHP(subtotal)}\n`;
+      orderSummary += `Shipping: ${formatPHP(shipping)}\n`;
+      orderSummary += `Total: ${formatPHP(total)}\n\n`;
+      orderSummary += 'A confirmation email has been sent to ' + email;
+      
+      alert(orderSummary);
+      
+      // Reset form and cart
+      document.getElementById('checkout-form').reset();
+      document.getElementById('checkout-modal').style.display = 'none';
+      cart = [];
+      updateCartUI();
+      document.getElementById('cart').style.display = 'none';
+      
+      showNotification('Order placed successfully!');
+    });
+
+    function viewDetails(id){
+      const prod = products.find(p=>p.id===id);
+      alert(prod.name + '\nPrice: ' + formatPHP(prod.price) + '\n\nReplace placeholder images with your real tool photos for a polished store.');
+    }
+
+    // set footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // initial UI
+    updateCartUI();
+  </script>
+</body>
+</html>
